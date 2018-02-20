@@ -1,38 +1,51 @@
 {-# LANGUAGE FlexibleContexts #-}
 
 module IOHK.ListenAndSend
-    ( listenAndSend
+    ( startListening
     ) where
 
 import Import
 
+import IOHK.Delay
 import IOHK.Info
 import IOHK.Message
 import IOHK.RNG
 
 import Control.Distributed.Process
 
-listenAndSend :: Info -> Process ()
-listenAndSend info = do
-    (newInfo, updated) <- listen info False
+startListening :: Int -> Int -> Info -> Process ()
+startListening n grace info =
+    if n == length (infoPids info)
+        then do
+            liftIO $ putStrLn "Starts sending"
+            listenAndSend grace info
+        else do
+            msg <- expect
+            startListening n grace $ updateInfo msg info
+
+listenAndSend :: Int -> Info -> Process ()
+listenAndSend grace info = do
+    (newInfo, updated) <- listen False info
     if generatingMore newInfo
-        then listenAndSend =<< generateAndSend newInfo
+        then listenAndSend grace =<< generateAndSend newInfo
         else if updated
-                 then listenAndSend newInfo
-                 else finish newInfo
+                 then listenAndSend grace newInfo
+                 else finish grace newInfo
 
-finish :: Info -> Process ()
-finish info =
-    liftIO . putStrLn $ concat [show $ nOfDoubles info, ", ", show $ total info]
+finish :: Int -> Info -> Process ()
+finish grace info = do
+    liftIO . threadDelay $
+        grace * microSecondsPerSecond - microSecondsPerSecond `div` 2
+    (newInfo, _) <- listen False info
+    liftIO . putStrLn $
+        concat [show $ nOfDoubles newInfo, ", ", show $ total newInfo]
 
-listen :: Info -> Bool -> Process (Info, Bool)
-listen info updated = do
+listen :: Bool -> Info -> Process (Info, Bool)
+listen updated info = do
     maybeMsg <- expectTimeout 0
     case maybeMsg of
         Nothing -> pure (info, updated)
-        Just msg ->
-            let newInfo = updateInfo msg info
-            in listen newInfo True
+        Just msg -> listen True $ updateInfo msg info
 
 generateAndSend :: Info -> Process Info
 generateAndSend info = do
