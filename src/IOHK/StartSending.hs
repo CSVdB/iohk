@@ -13,10 +13,13 @@ nOfProcesses = 4
 microSecondsPerSecond :: Int
 microSecondsPerSecond = 1000000
 
-startSending :: Int -> Int -> IO ()
-startSending duration seed = do
+waitForXSeconds :: Int -> IO ()
+waitForXSeconds = threadDelay . (*) microSecondsPerSecond
+
+startSending :: Int -> Int -> Int -> IO ()
+startSending duration grace seed = do
     (pids, node) <- createProcesses seed nOfProcesses
-    threadDelay $ microSecondsPerSecond * duration
+    waitForXSeconds duration
     runProcess node $ mapM_ endSending pids
-    threadDelay 1000000
+    waitForXSeconds grace
     closeLocalNode node

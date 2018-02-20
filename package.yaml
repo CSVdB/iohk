@@ -8,7 +8,6 @@ copyright:           "2018 Nick Van den Broeck"
 
 extra-source-files:
 - README.md
-- ChangeLog.md
 
 description:         See README at https://github.com/Nickske666/iohk
 
@@ -24,7 +23,7 @@ library:
   source-dirs: src
 
 executables:
-  iohk-exe:
+  iohk:
     main:                Main.hs
     source-dirs:         app
     ghc-options:

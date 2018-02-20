@@ -18,4 +18,4 @@ data MyMessage
 instance Binary MyMessage
 
 nOfDoublesPerMessage :: Int
-nOfDoublesPerMessage = 1000
+nOfDoublesPerMessage = 20000

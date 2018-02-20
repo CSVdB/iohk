@@ -1,4 +1,3 @@
-{-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE FlexibleContexts #-}
 
 module IOHK.Info
@@ -21,19 +20,16 @@ data Info = Info
     } deriving (Show)
 
 updateInfo :: MyMessage -> Info -> Info
-updateInfo StopSending Info {..} = Info nOfDoubles total infoPids False stdGen
-updateInfo (PID pid) Info {..} =
-    Info nOfDoubles total (pid : infoPids) generatingMore stdGen
-updateInfo (RandomN xs) Info {..} =
-    Info
-        (nOfDoubles + nOfDoublesPerMessage)
-        (updateTotal nOfDoubles total xs)
-        infoPids
-        generatingMore
-        stdGen
+updateInfo StopSending info = info {generatingMore = False}
+updateInfo (PID pid) info = info {infoPids = pid : infoPids info}
+updateInfo (RandomN xs) info =
+    info
+    { nOfDoubles = nOfDoublesPerMessage + nOfDoubles info
+    , total = updateTotal (nOfDoubles info) (total info) xs
+    }
 
 updateTotal :: Int -> Double -> [Double] -> Double
-updateTotal nOfDoubles total xs = (+) total . getNewTerm xs $ nOfDoubles + 1
+updateTotal n oldTotal xs = (+) oldTotal . getNewTerm xs $ n + 1
 
 getNewTerm :: [Double] -> Int -> Double
 getNewTerm [] _ = 0

@@ -13,4 +13,4 @@ iohk = do
     execute instructions
 
 execute :: Instructions -> IO ()
-execute StartSending {..} = startSending duration seed
+execute StartSending {..} = startSending duration grace seed
