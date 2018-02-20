@@ -10,17 +10,15 @@ extra-source-files:
 - README.md
 - ChangeLog.md
 
-# Metadata used when publishing your package
-# synopsis:            Short description of your package
-# category:            Web
-
-# To avoid duplicated efforts in documentation and dealing with the
-# complications of embedding Haddock markup inside cabal files, it is
-# common to point users to the README.md file.
-description:         Please see the README on Github at <https://github.com/githubuser/iohk#readme>
+description:         See README at https://github.com/Nickske666/iohk
 
 dependencies:
 - base >= 4.7 && < 5
+- distributed-process >= 0.7 && < 0.8
+- random >= 1.1 && < 1.2
+- network-transport-tcp >= 0.5 && < 0.6
+- binary >= 0.8 && < 0.9
+- mtl >= 2.2 && < 2.3
 
 library:
   source-dirs: src
