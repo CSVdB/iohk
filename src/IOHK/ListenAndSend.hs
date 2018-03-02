@@ -16,9 +16,7 @@ import Control.Distributed.Process
 startListening :: Int -> Int -> Info -> Process ()
 startListening n grace info =
     if n == length (infoPids info)
-        then do
-            liftIO $ putStrLn "Starts sending"
-            listenAndSend grace info
+        then listenAndSend grace info
         else do
             msg <- expect
             startListening n grace $ updateInfo msg info

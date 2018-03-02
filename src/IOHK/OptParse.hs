@@ -11,7 +11,7 @@ import System.Environment
 
 errMess :: String
 errMess =
-    "Input should be of the form \"startServer x y\" with x how long nodes should send messages (in s), y the grace period (in s) and z the seed."
+    "Input should be of the form \"startServer x y z\" with x how long nodes should send messages (in s), y the grace period (in s) and z the seed."
 
 getInstructions :: IO Instructions
 getInstructions = do

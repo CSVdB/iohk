@@ -11,8 +11,7 @@ import IOHK.Message
 import Control.Distributed.Process
 import Control.Distributed.Process.Node
 
-import Network.Transport.TCP
-       (createTransport, defaultTCPParameters)
+import Network.Transport.TCP (createTransport, defaultTCPParameters)
 
 import System.Random
 

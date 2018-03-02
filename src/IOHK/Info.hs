@@ -24,9 +24,9 @@ updateInfo StopSending info = info {generatingMore = False}
 updateInfo (PID pid) info = info {infoPids = pid : infoPids info}
 updateInfo (RandomN xs) info =
     info
-    { nOfDoubles = nOfDoublesPerMessage + nOfDoubles info
-    , total = updateTotal (nOfDoubles info) (total info) xs
-    }
+        { nOfDoubles = nOfDoublesPerMessage + nOfDoubles info
+        , total = updateTotal (nOfDoubles info) (total info) xs
+        }
 
 updateTotal :: Int -> Double -> [Double] -> Double
 updateTotal n oldTotal xs = (+) oldTotal . getNewTerm xs $ n + 1
