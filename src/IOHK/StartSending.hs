@@ -12,5 +12,5 @@ startSending duration grace seed = do
     (pids, node) <- createProcesses seed grace
     waitForXSeconds duration
     runProcess node $ mapM_ endSending pids
-    waitForXSeconds grace
+    waitForXSeconds (grace + 1)
     closeLocalNode node

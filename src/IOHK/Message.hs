@@ -11,7 +11,7 @@ import Control.Distributed.Process
 
 data MyMessage
     = StopSending
-    | PID ProcessId
+    | PIDs [ProcessId]
     | RandomN [Double]
     deriving (Show, Eq, Generic)
 

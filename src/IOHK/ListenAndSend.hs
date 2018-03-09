@@ -14,12 +14,11 @@ import IOHK.RNG
 import Control.Distributed.Process
 
 startListening :: Int -> Int -> Info -> Process ()
-startListening n grace info =
-    if n == length (infoPids info)
-        then listenAndSend grace info
-        else do
-            msg <- expect
-            startListening n grace $ updateInfo msg info
+startListening n grace info = do
+    (newInfo, _) <- listen False info
+    if length (infoPids newInfo) == n
+        then listenAndSend grace newInfo
+        else startListening n grace newInfo
 
 listenAndSend :: Int -> Info -> Process ()
 listenAndSend grace info = do
@@ -32,8 +31,7 @@ listenAndSend grace info = do
 
 finish :: Int -> Info -> Process ()
 finish grace info = do
-    liftIO . threadDelay $
-        grace * microSecondsPerSecond - microSecondsPerSecond `div` 2
+    liftIO . threadDelay $ grace * microSecondsPerSecond
     (newInfo, _) <- listen False info
     liftIO . putStrLn $
         concat [show $ nOfDoubles newInfo, ", ", show $ total newInfo]

@@ -21,7 +21,7 @@ data Info = Info
 
 updateInfo :: MyMessage -> Info -> Info
 updateInfo StopSending info = info {generatingMore = False}
-updateInfo (PID pid) info = info {infoPids = pid : infoPids info}
+updateInfo (PIDs pid) info = info {infoPids = pid}
 updateInfo (RandomN xs) info =
     info
         { nOfDoubles = nOfDoublesPerMessage + nOfDoubles info
